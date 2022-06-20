@@ -1,0 +1,312 @@
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+/* You can add global styles to this file, and also import other style files */
+html {
+    height: 100vh;
+    width: 100vw;
+}
+
+body {
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
+}
+
+.login {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.login .container {
+    margin: auto;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.login h1 {
+    text-align: center;
+}
+
+.login form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login .form-group {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    margin-bottom: 15px;
+}
+
+.login form label {
+    margin: auto 0;
+}
+
+.login form input {
+    height: 30px;
+}
+
+.login form button {
+    grid-column: 1/3;
+    width: 25%;
+    margin: auto;
+}
+
+header {
+    display: flex;
+    color: #FFF;
+}
+
+nav {
+    display: flex;
+    background: #0099CC;
+	color: #FFF;
+}
+
+nav p {
+    margin: 20px;
+    padding-left: 20px;
+}
+
+nav ul {
+    display: flex;
+    position: absolute;
+    right: 0;
+
+}
+
+nav ul li {
+    margin: 20px;
+    list-style-type: none;
+}
+
+.form {
+    width: fit-content;
+    margin: 50px auto;
+}
+
+.spinner {
+    display: flex;
+}
+
+.close-button {
+    padding: 0;
+    margin: auto;
+    width: auto;
+}
+
+.spinner-border {
+    margin: auto;
+}
+
+.cal-week-view {
+  overflow-y: scroll !important;
+  height: calc(100vh - 250px) !important;
+  margin-bottom: 15px;
+}
+
+.row.alternating-bg {
+    border: 0.5px solid black;
+    display: flex;
+    align-items: center;
+}
+
+.alternating-bg:nth-of-type(2n) {
+    background-color: #efefef;
+}
+
+.btn-primary.custom {
+    margin: 10px;
+}
+
+.h1 {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 50px;
+
+}
+
+a.navLink {
+    padding: 22px 30px;
+    text-decoration: none;
+}
+
+a.navLink:link {
+    color: #FFF;
+    background-color: #0099CC;
+}
+
+a.navLink:visited {
+    color: #FFF;
+}
+
+a.navLink:hover {
+    color: #0099CC;
+    text-decoration: underline;
+    background-color: #FFF;
+}
+
+a.navLink:active {
+    color: #bacbd1;
+}
+
+a.active {
+    text-decoration: underline;
+}
+
+.actionsBox {
+    margin:auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 300px;
+    border: 2px solid black;
+    border-radius: 6px;
+
+}
+
+.actionsBox button {
+    text-decoration: none;
+    font-size: 22px;
+    color: #FFF;
+    background-color:#0099CC;
+    padding : 20px, 50px;
+    border-radius: 8px;
+    width: 200px;
+}
+
+.btn.btn-primary {
+    text-decoration: none;
+    font-size: 22px;
+    color: #FFF;
+    background-color:#0099CC;
+    padding : 20px, 50px;
+    border-radius: 8px;
+}
+.btn.btn-secondary {
+    text-decoration: none;
+    font-size: 22px;
+    padding : 20px, 50px;
+    border-radius: 8px;
+}
+
+.btn.btn-primary:hover {
+    color:#0099CC;
+    background-color:#FFF;
+}
+
+.actionsBox button:hover{
+    color:#0099CC;
+    background-color:#FFF;
+}
+
+.actionsBox ul {
+    list-style: none;
+}
+
+.actionsBox .row {
+    flex-direction: column;
+}
+
+.actionsBox .row div {
+    margin: 10px;
+}
+
+nav img {
+    height: 64px;
+}
+
+ng-component {
+    display: block;
+    margin: 30px auto;
+    width: 95%;
+}
+
+app-users {
+    margin: 30px auto;
+    display: block;
+}
+
+.btn.btn-outline-secondary {
+    padding: 11px;
+}
+
+#addNewEvent {
+  margin: 0;
+}
+
+#addNewEvent button {
+  width: 35%;
+  margin: auto;
+}
+
+.left-align {
+  float: left;
+}
+
+.right-align {
+  float: right;
+}
+
+.form .form-group {
+  width: 450px;
+}
+
+.form .row {
+  width: 450px;
+}
+
+.form .container {
+  padding: 10px 0;
+}
+
+.form form {
+  margin: 0 auto;
+}
+
+.form form .row {
+  width: 300px;
+}
+
+.form form .form-group {
+  width: 300px;
+}
+
+span.delete-cross {
+  cursor: pointer;
+  color: red;
+}
+
+span.delete-cross:hover {
+  color: black;
+}
+
+.col-2 .btn:not(.btn-primary):not(.btn-secondary) {
+  color: white;
+  border: 1px solid white;
+  background-color: #0099CC;
+  padding: 3px 8px;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.col-2 .btn:not(.btn-primary):not(.btn-secondary):hover {
+  color: #0099CC;
+  border: 1px solid #0099CC;
+  background-color: white;
+  box-shadow: 2px 2px 2px gray;
+  transition: ease-in-out 0.25s;
+  transform: scale(1.1);
+}
+
+.col-2 .btn:not(.btn-primary):not(.btn-secondary):active {
+  color: white;
+  border: 1px solid white;
+  background-color: #0099CC;
+  padding: 3px 8px;
+  margin: 5px 0;
+  font-size: 14px;
+}

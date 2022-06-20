@@ -1,0 +1,16 @@
+<div class="mainHeader">
+  <p class="h1">
+    Quick Actions
+  </p>
+</div>
+
+<div class="actionsBox">
+  <div class="row">
+    <div class="col-12" *ngIf="isAdmin">
+      <button class="btn btn-primary" [routerLink]="['/users']" [queryParams]="{'addUser': true}">Create New User</button>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" [routerLink]="['/events']" [queryParams]="{'addEvent': true}">Add an Event</button>
+    </div>
+  </div>
+</div>

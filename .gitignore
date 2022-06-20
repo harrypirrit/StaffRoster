@@ -1,0 +1,30 @@
+# Ignore .DS_Store file
+.DS_Store
+
+# Ignore the build directory
+roster/build/
+roster/java/build/
+roster/angular/build/
+roster/test/build/
+roster/angular/.gradle/
+roster/java/.gradle/
+roster/.gradle
+
+# Ignore
+roster/.gradle/
+roster/database/SQLiteDB.db
+roster/angular/dist
+roster/angular/.angular
+roster/angular/node-modules
+roster/java/bin
+roster/test/bin/generated
+roster/.idea/.gitignore
+roster/.idea/codeStyles/codeStyleConfig.xml
+roster/.idea/compiler.xml
+roster/.idea/gradle.xml
+roster/.idea/jarRepositories.xml
+roster/.idea/misc.xml
+roster/.idea/vcs.xml
+roster/roster
+roster/java/SQLiteDB.db
+roster/java/SQLiteDB.db

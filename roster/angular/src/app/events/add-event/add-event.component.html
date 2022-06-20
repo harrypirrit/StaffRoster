@@ -1,0 +1,56 @@
+<form class="form" (submit)="addEvent()">
+  <h2>Add event</h2>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" [(ngModel)]="newEvent.description" class="form-control" id="description" name="description" required>
+        <p *ngIf="descriptionError">{{descriptionError}}</p>
+    </div>
+
+    <div class="form-group">
+        <label for="location">Location</label>
+        <input type="text" [(ngModel)]="newEvent.location" class="form-control" id="location" name="location" required>
+        <p *ngIf="locationError">{{locationError}}</p>
+    </div>
+
+    <div class="form-group">
+        <label for="startDate">Start date</label>
+        <input id="startDate" name="startDate" (dateChange)="date.setSeconds(0)" required [(ngModel)]="date" [ngxMatDatetimePicker]="picker" class="form-control" placeholder="Choose a start date"
+            (click)="picker.open()">
+        <ngx-mat-datetime-picker #picker>
+            <ng-template>
+                <span>OK</span>
+            </ng-template>
+        </ngx-mat-datetime-picker>
+        <p *ngIf="dateError">{{dateError}}</p>
+    </div>
+
+    <div class="form-group">
+        <label for="duration">Duration (hours)</label>
+        <input type="number" id="duration" name="duration" class="form-control" [(ngModel)]="newEvent.duration" required step="0.5">
+        <p *ngIf="durationError">{{durationError}}</p>
+    </div>
+
+    <div class="form-group">
+        <label for="assignees">Staff</label>
+        <select id="assignees" name="assignees" class="form-control" [(ngModel)]="newAssignees" multiple>
+            <option *ngFor="let user of users" [ngValue]="user.userID" [disabled]="user.userID == currentUser.userID">
+                {{user.firstName}} {{user.lastName}}
+            </option>
+        </select>
+    </div>
+
+    <div class="row">
+      <p>An email will be sent to each of the staff selected once this form is submitted.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-3 close-button">
+        <button class="btn btn-secondary" (click)="close.emit()">Close</button>
+      </div>
+      <div class="col-6"></div>
+      <div class="col-3 spinner">
+        <button type="submit" *ngIf="!isSaving" class="btn btn-primary custom">Register</button>
+        <div *ngIf="isSaving" class="spinner-border" role="status"></div>
+      </div>
+    </div>
+</form>

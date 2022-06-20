@@ -1,0 +1,79 @@
+<form class="form" *ngIf="!inviting">
+  <h1>View event</h1>
+  <div class="container">
+    {{event.description}}<br>
+    Created by: <a href="mailto:{{event.creator?.email}}">{{event.creator?.firstName}}
+    {{event.creator?.lastName}}</a><br>
+    Location: {{event.location}}<br>
+    <br>
+    Starts: {{event.date?.toString()}}<br>
+    Duration: {{event.duration}} {{event.duration == 1 ? 'hour' : 'hours'}}<br>
+
+    <label *ngIf="isAdmin || event.creator?.userID == usersID" for="statusField">Status: </label>
+    <select *ngIf="isAdmin || event.creator?.userID == usersID" id="statusField" name="statusField" [(ngModel)]="event.statusID" (change)="changeStatus()" class="form-contol">
+      <option *ngFor="let status of statuses" [value]="status.statusID">{{status.statusName}}</option>
+    </select>
+    <p *ngIf="!isAdmin && event.creator?.userID != usersID && statusName">Status: {{statusName}}</p>
+    <br>
+    {{event.assignees ? 'Staff assigned:' : 'No staff assigned'}}
+    <ul *ngIf="event.assignees">
+      <li *ngFor="let u of event.assignees">
+        <a href="mailto:{{u?.email}}">{{u?.firstName}} {{u?.lastName}}</a>
+        {{u?.isAccepted ? "Accepted" : "Not accepted"}}
+        <span *ngIf="isAdmin || usersID == event?.creator?.userID" class="delete-cross" (click)="unInvite(u?.userID || 0)">X</span>
+      </li>
+    </ul>
+    <br>
+  </div>
+  <div class="row justify-content-evenly">
+    <button (click)="close.emit()" class="btn btn-secondary custom w-25">Close</button>
+    <button *ngIf="isAdmin || usersID == event.creator?.userID" (click)="openDeleteModal(deleteModal)" class="btn btn-tertiary custom w-25">
+      Delete
+    </button>
+    <button (click)="toggleInvite()" class="btn btn-primary w-25">Invite</button>
+  </div>
+</form>
+
+<form *ngIf="inviting" (submit)="changeAssignees()" class="form">
+  <h2>Inviting staff to <strong>{{event.description}}</strong></h2>
+  <div class="container">
+    <div class="form-group">
+      <label for="assignees">Assign new Staff</label>
+      <select id="assignees" name="assignees" class="form-control" [(ngModel)]="newAssignees" multiple>
+        <option *ngFor="let user of users" [ngValue]="user?.userID" [disabled]="isUserAlreadyInvited(user?.userID || 0) || user.userID == event?.creator?.userID">
+          {{user?.firstName}} {{user?.lastName}}
+        </option>
+      </select>
+    </div>
+
+    <div class="row">
+      <p>An email will be sent to each of the staff selected once this form is submitted.</p>
+    </div>
+
+    <div class="row" *ngIf="message">
+      <p>{{message}}</p>
+    </div>
+  </div>
+  <div class="row justify-content-evenly">
+      <button type="button" (click)="toggleInvite()" class="btn btn-primary w-25">Cancel</button>
+      <button *ngIf="!isSaving" type="submit" class="btn btn-primary w-25">Invite</button>
+    <div *ngIf="isSaving" class="w-25 align-self-center text-center">
+      <div class="spinner-border" role="status"></div>
+    </div>
+  </div>
+</form>
+
+<ng-template #deleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Delete event</h4>
+  </div>
+  <div class="modal-body">
+    <p>
+      Are you sure you want to delete <strong>{{event.description}}</strong>?
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+    <button class="btn btn-primary" (click)="deleteEvent()">Confirm</button>
+  </div>
+</ng-template>

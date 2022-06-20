@@ -1,0 +1,643 @@
+openapi: 3.0.3
+info:
+  title: Events roster
+  version: '1.0'
+  description: The API for Events roster.
+servers:
+  - url: 'http://localhost:8080/api'
+    description: ''
+paths:
+  '/users':
+    summary: User List
+    description: A list of all users.
+    get:
+      tags:
+        - Users
+      parameters:
+          - in: header
+            name: Authorization
+            schema:
+              type: string
+            required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: Response contains the entire user list.
+      operationId: get All Users
+      summary: Gets All Staff Members
+      description: Returns a list of all users.
+  '/user':
+    summary: Gets logged in user
+    get:
+      parameters:
+          - in: header
+            name: Authorization
+            schema:
+              type: string
+            required: true
+      tags:
+        - User
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Response contains the users details
+        '401':
+          description: 'User unauthorised'
+      description: Gets the logged in user.
+      operationId: get User By Id
+  '/user/login':
+    summary: Logs in using email and password
+    post:
+      requestBody:
+        description: User class with email and password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      tags:
+        - User
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseType'
+          description: Response contains the JWT
+      description: Does login
+      operationId: login
+    
+    
+    
+    
+  '/roles':
+    summary: Role List
+    description: A list of all roles.
+    get:
+      tags:
+        - Users
+      parameters:
+          - in: header
+            name: Authorization
+            schema:
+              type: string
+            required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+          description: Response contains the entire role list.
+      operationId: get All Roles
+      summary: Gets All Roles
+      description: Returns a list of all roles.
+  
+  '/shifts/open':
+    summary: Open Shifts List
+    description: A list of Open Shifts
+    get:
+      tags:
+        - Open Shifts List
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/Shift'
+              example: ''
+          description: Response contains the entire Open Shift list.
+    post:
+      tags:
+        - Open Shifts List
+      requestBody:
+        description: Details of Shift
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shift'
+        required: true
+      responses:
+        '201':
+          description: New shift added.
+          headers: {}
+          content: {}
+          links: {}
+        '422':
+          description: 'Shift not added, a Shift with that name already exists.'
+      operationId: add to open shifts
+      summary: Adds a new shift.
+      description: Adds a new shift.
+  '/shifts/open/{eventId}':
+    summary: Open Shift
+    description: A single Open Shift
+    get:
+      tags:
+        - Open Shift
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the User.
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shift'
+          description: Response contains a single shift.
+          headers: {}
+          links: {}
+        '404':
+          description: No shift with that ID was found.
+          headers: {}
+          content: {}
+          links: {}
+      operationId: get shift by id
+      summary: Gets a shift by its ID.
+      description: Gets a single shift by its ID.
+    delete:
+      tags:
+        - Open Shift
+      operationId: delete shift
+      summary: Deletes a shift by its ID.
+      description: Deletes a shift by its ID.
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the Shift.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Shift successfully deleted.
+          headers: {}
+          content: {}
+          links: {}
+        '404':
+          description: No shift with that ID was found.
+          headers: {}
+          content: {}
+          links: {}
+  '/shifts/open/{eventId}/{userId}':
+    summary: Open Shift with User
+    description: A single Open Shift with User ID
+    post:
+        tags:
+          - Open Shift with User
+        parameters:
+          - name: eventId
+            in: path
+            required: true
+            deprecated: false
+            description: The ID of the event.
+            schema:
+             type: string
+          - name: userId
+            in: path
+            required: true
+            deprecated: false
+            description: The ID of the User.
+            schema:
+              type: string
+        responses:
+          '204':
+            description: Customer successfully updated.
+            headers: {}
+            content: {}
+            links: {}
+          '404':
+            description: Invalid Shift or User ID.
+            headers: {}
+            content: {}
+            links: {}
+        operationId: assign user to shift
+        summary: Assigns a user to a shift.
+        description: Assigns a user to a shift.
+    put:
+        tags:
+          - Open Shift with User
+        parameters:
+          - name: eventId
+            in: path
+            required: true
+            deprecated: false
+            description: The ID of the event.
+            schema:
+             type: string
+          - name: userId
+            in: path
+            required: true
+            deprecated: false
+            description: The ID of the User.
+            schema:
+              type: string
+        responses:
+          '204':
+            description: Customer successfully updated.
+            headers: {}
+            content: {}
+            links: {}
+          '404':
+            description: Invalid Shift or User ID.
+            headers: {}
+            content: {}
+            links: {}
+        operationId: Remove user from shift
+        summary: Removes a user from a shift.
+        description: Removes a user from a shift.
+  '/staff/shifts/{userId}':
+    summary: Staff Shifts
+    description: All shifts assigned to a staff member.
+    get:
+      tags:
+        - Staff Shifts
+      operationId: get shifts by user
+      summary: Get Shifts by User
+      description: Gets all shifts for a specified user.
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user
+          required: true
+          deprecated: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/Shift'
+              example: ''
+          description: Response contains a list of all users shifts.
+        '404':
+            description: No shifts were found with that User ID.
+            headers: {}
+            content: {}
+            links: {}
+  '/staff/unavailability/{userId}':
+    summary: User Unavailabilities
+    description: A list of unavailabilities for a specified user.
+    get:
+      tags:
+        - Unavailability List for User
+      operationId: get unavailability by user
+      summary: Get Unavailability by User
+      description: Gets all unavailabilities for a specified user
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user
+          required: true
+          deprecated: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/Unavailability'
+              example: ''
+          description: Response contains a list of all users unavailabities.
+    post:
+      tags:
+        - Unavailability List for User
+      operationId: add unavailability from user
+      summary: Add Unavailability to User
+      description: Adds an unavailability to a user.
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user
+          required: true
+          deprecated: false
+          schema:
+            type: string
+      requestBody:
+        description: Details of Unavailability
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Unavailability'
+        required: true
+      responses:
+        '201':
+          description: New unavailability added.
+          headers: {}
+          content: {}
+          links: {}
+        '422':
+          description: 'Unavailability not added.'
+  '/staff/unavailability/{userId}/{eventId}':
+    summary: User Unavailability
+    description: A single user unavailability
+    delete:
+      tags: 
+        - Unavailability for User
+      operationId: delete unavailability from user
+      summary: Delete Unavailability from User.
+      description: Deletes a specified Unavailability from a specified User.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the User.
+          schema:
+            type: string
+        - name: eventId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the event.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Staff Member successfully deleted.
+          headers: {}
+          content: {}
+          links: {}
+        '404':
+          description: No staff member with that ID was found.
+          headers: {}
+          content: {}
+          links: {}
+  '/staff/events/{userId}':
+    summary: Staff Events
+    description: All events associated with a staff member.
+    get:
+      tags:
+        - Events for User
+      operationId: get user events in period
+      summary: Get user events in a period.
+      description: Get a list of user events in a time period.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the User.
+          schema:
+            type: string
+        - name: startOfPeriod
+          in: query
+          required: true
+          deprecated: false
+          schema:
+            type: string
+            format: date-time
+          description: The start date of the period (Format = mm-dd-yyyy).
+        - name: daysInPeriod
+          in: query
+          required: true
+          deprecated: false
+          schema:
+            type: integer
+          description: The number of days in the period.
+        - name: filter
+          in: query
+          required: true
+          deprecated: false
+          schema:
+            type: integer
+          description: Filter on the search. (0 = All Events, 1 = Shifts, 2 = Unavailabilities)
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+              example: ''
+          description: Response contains a list of all relevant events.
+        '404':
+            description: No events were found with that User ID.
+            headers: {}
+            content: {}
+            links: {}
+  '/staff/hours/{userId}':
+    summary: Staff Hours
+    description: All hours scheduled for a User.
+    get:
+      tags:
+        - Hours for User
+      operationId: get user hours for period
+      summary: Get user hours in a period.
+      description: Gets a number of hours scheduled for a user in specified period.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the User.
+          schema:
+            type: string
+        - name: startOfPeriod
+          in: query
+          required: true
+          deprecated: false
+          schema:
+            type: string
+            format: date-time
+          description: The start date of the period (Format = mm-dd-yyyy).
+        - name: daysInPeriod
+          in: query
+          required: true
+          deprecated: false
+          schema:
+            type: integer
+          description: The number of days in the period.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: integer
+              example: ''
+          description: Response contains the number of hours scheduled.
+        '404':
+            description: No hours were able to be calculated with that User ID.
+            headers: {}
+            content: {}
+            links: {}
+components:
+  schemas:
+    User:
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+        - roleID
+      type: object
+      properties:
+        userID:
+          description: The unique ID of the user
+          type: integer
+        firstName:
+          description: The first name of the user.
+          type: string
+        lastName:
+          description: The last name of the user.
+          type: string
+        email:
+          description: The email of the user.
+          type: string
+        password:
+          description: The users password
+          type: string
+        phoneNumber:
+          description: The users phone number.
+          type: string
+        roleID:
+          description: The users roles ID
+          type: integer
+    Role:
+      required:
+        - roleID
+        - roleName
+      type: object
+      properties:
+        roleID:
+          description: The unique ID of the role.
+          type: integer
+        roleName:
+          description: The description of the role.
+          type: string
+    ResponseType:
+      required:
+        - result
+        - message
+      type: object
+      properties:
+        result:
+          description: The result.
+          type: string
+        message:
+          description: The message.
+          type: string
+    Shift:
+      required:
+        - start
+        - end
+        - name
+        - type
+      type: object
+      properties:
+        start:
+          description: The scheduled start of the shift.
+          type: string
+          format: date-time
+        end:
+          description: The scheduled finish of the shift.
+          type: string
+          format: date-time
+        name:
+          description: The name of the shift.
+          type: string
+        description:
+          description: Description of the shift.
+          type: string
+        notes:
+          description: Notes for the shift.
+          type: string
+        type:
+          description: The type of shift.
+          type: string
+    Unavailability:
+      required:
+        - start
+        - end
+        - repeat
+        - description
+      type: object
+      properties:
+        start:
+          description: The scheduled start of the unavailability.
+          type: string
+          format: date-time
+        end:
+          description: The scheduled finish of the unavailability.
+          type: string
+          format: date-time
+        repeat:
+          description: How often the unavailability repeats.
+          type: string
+        description:
+          description: The description .
+          type: string
+    Event:
+      required:
+        - eventId
+        - User
+        - start
+        - end
+      type: object
+      properties:
+        eventId:
+          description: The unique ID of the event.
+          type: integer
+        User:
+          $ref: '#/components/schemas/User'
+        start:
+          description: The scheduled start of the event.
+          type: string
+          format: date-time
+        end:
+          description: The scheduled finish of the event.
+          type: string
+          format: date-time
+  securitySchemes: {}
+  headers: {}
+  responses: {}
+  parameters: {}
+tags:
+  - name: Users
+    description: A list of all users.
+  - name: User
+    description: A single user.
+  - name: Open Shifts List
+    description: List of Open Shifts
+  - name: Staff Shifts
+    description: List of Shifts for a Staff Member
+  - name: Open Shift with User
+    description: A single Open Shift with User ID
+  - name: Unavailability List for User
+    description: A list of User Unavailabilities
+  - name: Unavailability for User
+    description: A single User Unavailability
+  - name: Events for User
+    description: A list of Events for a specified User.
+  - name: Hours for User
+    description: Amount of hours scheduled in period by specified User.
+security: []

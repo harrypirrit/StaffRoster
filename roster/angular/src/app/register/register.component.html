@@ -1,0 +1,47 @@
+<form class="form" (submit)="submit()">
+  <h2>Register user</h2>
+  <div class="form-group">
+    <label for="firstNameInput">First name: </label>
+    <input id="firstNameInput" class="form-control" name="firstNameInput" type="text" [(ngModel)]="user.firstName">
+    <p *ngIf="firstNameError">{{firstNameError}}</p>
+  </div>
+  <div class="form-group">
+    <label for="lastNameInput">Last name: </label>
+    <input id="lastNameInput" class="form-control" name="LastNameInput" type="text" [(ngModel)]="user.lastName">
+    <p *ngIf="lastNameError">{{lastNameError}}</p>
+  </div>
+
+  <div class="form-group">
+    <label for="emailInput">Email address: </label>
+    <input id="emailInput" class="form-control" name="emailInput" type="email" [(ngModel)]="user.email">
+    <p *ngIf="emailError">{{emailError}}</p>
+  </div>
+
+  <div class="form-group">
+    <label for="phoneInput">Phone number: </label>
+    <input id="phoneInput" class="form-control" name="phoneInput" type="tel" [(ngModel)]="user.phoneNumber">
+  </div>
+
+  <div class="form-group">
+    <label for="roleSelect">Role</label>
+    <select id="roleSelect" class="form-control" name="roleSelect" [(ngModel)]="user.roleID">
+      <option *ngFor="let role of roles" [attr.value]="role.roleID">{{role.roleName}}</option>
+    </select>
+    <p *ngIf="roleError">{{roleError}}</p>
+  </div>
+  <div class="row">
+    <p>An email will be sent to the email address provided when this form is submitted.</p>
+  </div>
+  <div class="row">
+    <div class="col-3 close-button">
+      <button class="btn btn-secondary custom" (click)="close()">Close</button>
+    </div>
+    <div class="col-6"></div>
+    <div class="col-3 spinner">
+      <button type="submit" *ngIf="!isSaving" class="btn btn-primary custom">Register</button>
+      <div *ngIf="isSaving" class="spinner-border" role="status"></div>
+    </div>
+  </div>
+  <br>
+  <p *ngIf="message">{{message}}</p>
+</form>

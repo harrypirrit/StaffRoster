@@ -1,0 +1,99 @@
+plugins {
+	id 'java'
+	id 'org.openapi.generator' version '5.4.0'
+}
+
+repositories {
+	mavenCentral()
+}
+
+test {
+	useJUnitPlatform()
+
+	// only run tests if we explicitly run the 'tests' task
+	onlyIf { project.gradle.startParameter.taskNames.contains("test") 
+}
+}
+
+// run OpenAPI generator as a dependency of the standard build
+compileJava {
+	dependsOn(tasks.openApiGenerate)
+}
+
+sourceSets {
+
+	generated {
+
+		java {
+			srcDirs =['build/generated/src/main/java']
+		}
+
+		dependencies {
+			implementation group: 'com.google.code.findbugs', 
+name: 'jsr305', version: '3.0.2'
+			implementation group: 'io.swagger', name: 
+'swagger-annotations', version: '1.6.5'
+			implementation group: 'javax.annotation', name: 
+'javax.annotation-api', version: '1.3.2'
+		}
+
+		// generated classes need the main dependencies
+		compileClasspath += main.compileClasspath
+	}
+
+	main {
+
+		dependencies {
+			def retrofitVer = '2.9.0'
+			implementation group: 'com.squareup.retrofit2', 
+name: 'retrofit', version: retrofitVer
+			implementation group: 'com.squareup.retrofit2', 
+name: 'converter-gson', version: retrofitVer
+
+			def junitVer = '5.8.2'
+			testImplementation group: 'org.junit.jupiter', 
+name: 'junit-jupiter-api', version: junitVer
+			testRuntimeOnly group: 'org.junit.jupiter', name: 
+'junit-jupiter-engine', version: junitVer
+			testImplementation group: 'org.hamcrest', name: 
+'hamcrest', version: '2.2'
+		}
+
+		// main needs to be able to see the generated classes
+		compileClasspath += generated.output
+		runtimeClasspath += generated.output
+	}
+
+	test {
+		// tests also need to be able to see the generated classes
+		compileClasspath += generated.output
+		runtimeClasspath += generated.output
+	}
+}
+
+openApiGenerate {
+	generatorName = "java"
+	library = "retrofit2"
+	inputSpec = file('src/main/resources/roster.yaml').toString()
+	outputDir = file('build/generated').toString()
+	apiPackage = "api"
+	modelPackage = "domain"
+	invokerPackage = "util"
+	validateSpec = true
+	globalProperties = [
+		apis: "",
+		models: "",
+		modelTests: "false",
+		apiTests: "false",
+		modelDocs: "false",
+		apiDocs: "false,",
+		supportingFiles:"CollectionFormats.java,StringUtil.java"
+	]
+	configOptions = [
+      dateLibrary: "java8",
+	   bigDecimalAsString : "true",
+	   useRuntimeException : "true"
+	]
+}
+
+

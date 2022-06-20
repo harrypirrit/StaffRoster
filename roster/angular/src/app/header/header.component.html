@@ -1,0 +1,13 @@
+<div class="header" *ngIf="user">
+  <nav>
+    <img src="assets/otagoLogo.jpeg" alt="universityLogo">
+    <p>Hello, {{!user ? "" : user.firstName + " " + user.lastName + " (" + user.roleName + ")"}}</p>
+    <ul>
+      <li><a class="navLink" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+      <li><a class="navLink" routerLink="/events" routerLinkActive="active">Events</a></li>
+      <li *ngIf="isAdmin"><a class="navLink" routerLink="/users" routerLinkActive="active">Users</a></li>
+      <li><a class="navLink" routerLink="/contact" routerLinkActive="active">Contact Us</a></li>
+      <li><a class="navLink" routerLink="" (click)="logout()">Logout</a></li>
+    </ul>
+  </nav>
+</div>

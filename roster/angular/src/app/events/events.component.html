@@ -1,0 +1,62 @@
+<ng-container *ngIf="!viewing && !adding; else form">
+  <div class="row text-center">
+    <div class="col-md-4">
+      <div class="btn-group">
+        <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+             (viewDateChange)="closeOpenMonthViewDay()">
+          Previous
+        </div>
+        <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+          Today
+        </div>
+        <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+             (viewDateChange)="closeOpenMonthViewDay()">
+          Next
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+    </div>
+    <div class="col-md-4">
+      <div class="btn-group">
+        <div class="btn btn-primary" (click)="setView(calendarView.Month)" [class.active]="view === calendarView.Month">
+          Month
+        </div>
+        <div class="btn btn-primary" (click)="setView(calendarView.Week)" [class.active]="view === calendarView.Week">
+          Week
+        </div>
+        <div class="btn btn-primary" (click)="setView(calendarView.Day)" [class.active]="view === calendarView.Day">
+          Day
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <div *ngIf="!refreshing" [ngSwitch]="view">
+    <mwl-calendar-month-view *ngSwitchCase="calendarView.Month" [viewDate]="viewDate" [events]="events"
+                             [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen"
+                             (eventClicked)="openView($event.event)"
+                             (dayClicked)="dayClicked($event.day)">
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view *ngSwitchCase="calendarView.Week" [viewDate]="viewDate" [events]="events"
+                            [refresh]="refresh" (eventClicked)="openView($event.event)">
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view *ngSwitchCase="calendarView.Day" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+                           (eventClicked)="openView($event.event)">
+    </mwl-calendar-day-view>
+  </div>
+  <div id="addNewEvent" class="row">
+    <button (click)="toggleAdd()" class="btn btn-primary">Add new event</button>
+  </div>
+</ng-container>
+
+<ng-template #form>
+  <ng-container *ngIf="viewing; then viewForm; else addForm"></ng-container>
+  <ng-template #addForm>
+    <app-add-event (close)="toggleAdd()"></app-add-event>
+  </ng-template>
+  <ng-template #viewForm>
+    <app-view-event (close)="closeView()" [event]="getEvent" (delete)="deleteEvent()"></app-view-event>
+  </ng-template>
+</ng-template>

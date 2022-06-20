@@ -1,0 +1,12 @@
+task run {
+    dependsOn ':angular:nodeSetup'
+    dependsOn ':angular:npmInstall'
+    dependsOn ':angular:npm_run_build'
+}
+
+task jar {
+    dependsOn ':angular:nodeSetup'
+    dependsOn ':angular:npmInstall'
+    dependsOn ':angular:npm_run_build'
+}
+

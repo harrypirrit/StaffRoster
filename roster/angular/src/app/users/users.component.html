@@ -1,0 +1,52 @@
+<ng-container *ngIf="users">
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+      <div class="row">
+        <div class="col-2">Name</div>
+        <div class="col-2">Email</div>
+        <div class="col-2">Phone</div>
+        <div class="col-2">Role</div>
+        <div class="col-2"></div>
+        <div class="col-2"></div>
+      </div>
+      <div class="row alternating-bg" *ngFor="let user of users">
+        <div class="col-2">{{user.firstName}} {{user.lastName}}</div>
+        <div class="col-2">{{user.email}}</div>
+        <div class="col-2">{{user.phoneNumber}}</div>
+        <div class="col-2">{{user.roleName}}</div>
+        <div class="col-2"><button [disabled]="editing || addingUser" class="btn" (click)="editing = user.userID">Edit</button></div>
+        <div class="col-2"><button *ngIf="user.userID != currentUser.userID" [disabled]="editing || addingUser" class="btn" (click)="openDeleteModal(deleteModal, user.userID)">Delete</button></div>
+      </div>
+    </div>
+    <div class="col-2"></div>
+  </div>
+</ng-container>
+
+<app-register *ngIf="addingUser" (toggleForm)="toggleForm()"></app-register>
+<app-edit-user *ngIf="editing" [user]="getEditingUser()" (close)="closeEdit()"></app-edit-user>
+
+<div class="row">
+  <div class="col-8"></div>
+  <div class="col-4">
+    <button *ngIf="!addingUser && !editing" (click)="toggleForm()" class="btn btn-primary custom">Register new user</button>
+  </div>
+</div>
+
+<ng-template #deleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Delete user</h4>
+  </div>
+  <div class="modal-body">
+    <p>
+      Are you sure you want to delete <strong>{{getDeletingUser?.firstName}} {{getDeletingUser?.lastName}}</strong>?
+    </p>
+    <p>
+      This will delete any event they have created.
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+    <button class="btn btn-primary" (click)="deleteUser(deletingUser)">Confirm</button>
+  </div>
+</ng-template>

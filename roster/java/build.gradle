@@ -1,0 +1,104 @@
+plugins {
+    // Apply the application plugin to add support for building a CLI application in Java.
+    id 'application'
+    id 'java-library-distribution'
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+configurations {
+    extraLibs
+}
+
+dependencies {
+    // Use JUnit Jupiter for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
+    def joobyVer =  '2.13.0'
+    extraLibs group: 'io.jooby', name: 'jooby-netty', version: joobyVer
+    extraLibs group: 'io.jooby', name: 'jooby-gson', version: joobyVer
+
+    // This dependency is used by the application.
+    extraLibs 'com.google.guava:guava:30.1.1-jre'
+    extraLibs 'org.xerial:sqlite-jdbc:3.36.0.3'
+    extraLibs 'org.jdbi:jdbi3-core:3.21.0'
+    extraLibs 'org.jdbi:jdbi3-sqlobject:3.21.0'
+    extraLibs 'org.slf4j:slf4j-api:1.7.25'
+    extraLibs 'org.slf4j:slf4j-simple:1.7.25'
+    extraLibs 'io.fusionauth:fusionauth-jwt:5.1.1'
+    extraLibs 'com.sun.mail:javax.mail:1.6.2'
+
+    configurations.implementation.extendsFrom(configurations.extraLibs)
+}
+
+sourceSets {
+    'static' {
+        resources {
+            srcDirs = ['static']
+        }
+        java{
+            srcDirs = []
+        }
+    }
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'roster.App'
+}
+
+mainClassName = 'roster.App'
+
+test {
+	useJUnitPlatform()
+
+	// only run tests if we explicitly run the 'tests' task
+	onlyIf { project.gradle.startParameter.taskNames.contains("test") }
+}
+
+tasks.distTar.enabled = false
+
+distZip {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+distributions {
+    main {
+        distributionBaseName = 'roster'
+        contents {
+            from('static') {
+                into 'static'
+            }
+            from('../jar_scripts') {
+                into ''
+            }
+        }
+    }
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    baseName = 'roster-app'
+    manifest {
+        attributes 'Main-Class': 'roster.App'
+    }
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task copyJar {
+    doLast {
+        copy {
+            from 'build/distributions'
+            into '../../'
+            include 'roster.zip'
+        }
+    }
+}
+
+jar.dependsOn rootProject.run
+run.dependsOn rootProject.run
+copyJar.dependsOn build

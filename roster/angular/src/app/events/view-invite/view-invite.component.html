@@ -1,0 +1,13 @@
+<div *ngIf="showForm" class="form">
+  <div class="form-group">
+    <p>{{event?.creator?.firstName}} {{event?.creator?.lastName}} has invited you to attend {{event?.description}}</p>
+  </div>
+  <div class="row">
+    <div class="col-8"></div>
+    <div class="col-4">
+      <button type="submit" class="btn btn-primary custom" (click)="acceptInvite()">Accept</button>
+    </div>
+  </div>
+</div>
+<p *ngIf="message">{{message}}</p>
+<div *ngIf="message" class="spinner-border" role="status"></div>
